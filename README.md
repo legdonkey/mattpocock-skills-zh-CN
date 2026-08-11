@@ -22,14 +22,14 @@
 npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 ```
 
-在 Claude Code 中运行：
+选择你想安装的 skills，以及要安装到哪些 coding agents。首次安装时请确保选择 [`/setup-matt-pocock-skills`](./skills/engineering/setup-matt-pocock-skills/SKILL.md)，然后在 agent 中运行它来完成 issue tracker、labels 和 docs 目录配置。
+
+或者在 Claude Code 中运行：
 
 ```
 /plugin marketplace add vinvcn/mattpocock-skills-zh-CN
 /plugin install mattpocock-skills@mattpocock
 ```
-
-选择你想安装的 skills，以及要安装到哪些 coding agents。首次安装时请确保选择 [`/setup-matt-pocock-skills`](./skills/engineering/setup-matt-pocock-skills/SKILL.md)，然后在 agent 中运行它来完成 issue tracker、labels 和 docs 目录配置。
 
 [![skills.sh](https://skills.sh/b/vinvcn/mattpocock-skills-zh-CN)](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)
 
