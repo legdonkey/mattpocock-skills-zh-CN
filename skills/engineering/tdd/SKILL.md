@@ -23,6 +23,8 @@ Tests 应通过 public interfaces 验证 behavior，而不是 implementation det
 
 询问："What's the public interface, and which seams should we test?"
 
+当 interface 的形状本身就是问题所在时——module 该多深、seam 该放在哪里、interface 应该暴露什么——用 `/codebase-design` skill 获取词汇。它是 module、interface、depth、seam、adapter、leverage 和 locality 这些术语的共享来源，是供查阅的 reference，而不是要运行的 session。
+
 ## Anti-patterns
 
 - **Implementation-coupled** — mock internal collaborators、测试 private methods，或通过 side channel 验证（例如不用 interface 而直接查询 database）。特征是 refactor 时 test 失败，但 behavior 没变。

@@ -1,3 +1,0 @@
-interface:
-  display_name: "QA"
-  short_description: "通过对话执行 QA 并提交 issues"
