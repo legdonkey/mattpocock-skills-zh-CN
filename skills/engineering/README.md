@@ -29,3 +29,4 @@
 - **[codebase-design](./codebase-design/SKILL.md)** - 用于设计 deep modules 的共享纪律和词汇：小 interface、清晰 seam、通过 interface 测试。
 - **[code-review](./code-review/SKILL.md)** - 对固定点之后的 diff 做双轴 review：**Standards**（是否遵循 repo 的编码规范，外加 Fowler smell baseline？）和 **Spec**（是否忠实实现了源头的 issue/PRD？），作为并行 sub-agents 运行。
 - **[resolving-merge-conflicts](./resolving-merge-conflicts/SKILL.md)** - 逐 hunk 处理正在进行的 git merge 或 rebase conflict，按追溯到每一侧 primary source 的意图来解决，然后完成该操作——绝不 `--abort`。
+- **[wizard](./wizard/SKILL.md)** - 生成交互式 bash wizard，引导人完成只有他们能执行的步骤：provisioning 基础设施、设置 credentials 或 CI secrets、走查不熟悉的第三方 dashboard，或运行一次性 migration 或 cutover。

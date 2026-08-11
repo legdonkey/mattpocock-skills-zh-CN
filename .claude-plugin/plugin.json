@@ -1,6 +1,6 @@
 {
   "name": "mattpocock-skills",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "Matt Pocock 面向真实工程工作的 agent skills：持续追问、spec/ticket flows、TDD、代码审查、领域建模等。即装即用，不是 vibe coding。",
   "author": {
     "name": "Matt Pocock",
@@ -36,11 +36,14 @@
     "./skills/engineering/to-tickets",
     "./skills/engineering/triage",
     "./skills/engineering/wayfinder",
+    "./skills/engineering/wizard",
     "./skills/productivity/grill-me",
     "./skills/productivity/grilling",
     "./skills/productivity/handoff",
     "./skills/productivity/teach",
-    "./skills/productivity/writing-great-skills",
+    "./skills/productivity/to-questionnaire",
+    "./skills/productivity/wait-what",
+    "./skills/productivity/writing-for-agents",
     "./skills/misc/git-guardrails-claude-code",
     "./skills/misc/migrate-to-shoehorn",
     "./skills/misc/scaffold-exercises",

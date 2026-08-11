@@ -9,6 +9,12 @@ description: 面向棘手缺陷和性能回退的诊断循环。适用于用户�
 
 探索 codebase 时，先读取 `CONTEXT.md`（如果存在），建立相关 modules 的清晰 mental model，并检查你将触碰区域的 ADRs。
 
+## Redact
+
+这个 skill 会要求你展示 commands、outputs 和捕获的 artifacts。**先 redact 掉每个 secret**——用 `<REDACTED>` 替换。Build loops 要针对 env vars 进行，让 credential 留在 environment 里而不是你展示的内容中。捕获的 artifacts 带有 auth headers：只引用携带 signal 的那些行。
+
+如果 redact 后的 output 不足以诊断 bug，就说明情况并询问用户。
+
 ## Phase 1 - Build a feedback loop
 
 **这就是这个 skill 的核心。** 其他所有内容都是机械步骤。如果你拥有一个针对该 bug 的 **tight** pass/fail signal，即它会在 _这个_ bug 上变红，你就能找到原因；bisection、hypothesis-testing 和 instrumentation 都只是消费这个 signal。没有它，盯着代码看多久都救不了你。
@@ -46,11 +52,11 @@ description: 面向棘手缺陷和性能回退的诊断循环。适用于用户�
 
 ### When you genuinely cannot build a loop
 
-停下来并明确说明。列出你尝试过什么。向用户请求：(a) 能复现的环境访问权限，(b) 捕获的 artifact（HAR file、log dump、core dump、带 timestamps 的 screen recording），或 (c) 添加临时 production instrumentation 的许可。**不要** 在没有 loop 时继续 hypothesise。
+停下来并明确说明。列出你尝试过什么。向用户请求：(a) 能复现的环境访问权限，(b) 经 redact 的 captured artifact（HAR file、log dump、core dump、带 timestamps 的 screen recording），或 (c) 添加临时 production instrumentation 的许可。**不要** 在没有 loop 时继续 hypothesise。
 
 ### Completion criterion - a tight loop that goes red
 
-Phase 1 完成条件：loop **tight** 且 **red-capable**。你能指出 **一个 command**（script path、test invocation、curl），并且你已经至少运行过一次（贴出 invocation 和 output），且它满足：
+Phase 1 完成条件：loop **tight** 且 **red-capable**。你能指出 **一个 command**（script path、test invocation、curl），并且你已经至少运行过一次（展示 invocation 和 output，已 redact），且它满足：
 
 - [ ] **Red-capable** - 它驱动真实 bug code path，并断言 **用户的 exact symptom**，因此能在该 bug 上变红、修复后变绿。不是 "runs without erroring"，而是必须能 _catch this specific bug_。
 - [ ] **Deterministic** - 每次运行 verdict 相同（flaky bugs：按上文固定到高复现率）。
