@@ -31,6 +31,32 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 /plugin install mattpocock-skills@mattpocock
 ```
 
+### 作为 Pi Package 安装
+
+这个 fork 可以作为一个受管理的 [Pi Package](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/packages.md) 集中安装。仓库只克隆一份，内部 skills 仍按需加载：
+
+```bash
+pi install git:github.com/legdonkey/mattpocock-skills-zh-CN
+```
+
+重新启动 Pi；如果 Pi 已经在运行，则执行 `/reload`。首次在项目中使用时运行：
+
+```text
+/setup-matt-pocock-skills
+```
+
+本包提供 Claude 风格的短命令别名，例如 `/tdd`、`/ask-matt` 和 `/code-review`；Pi 原生命令 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review` 同样可用。如果短命令与其他 extension 冲突，请使用 `/skill:<name>`。技能文档里的 Claude Code `/clear` 也已兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
+
+统一管理：
+
+```bash
+pi list
+pi update --extensions
+pi remove git:github.com/legdonkey/mattpocock-skills-zh-CN
+```
+
+Pi 清单只加载稳定技能：排除 `skills/in-progress/`，同时排除只用于 Claude Code hooks 的 `git-guardrails-claude-code`。同步上游清单后可运行 `npm run check:pi` 检查 Pi 清单、文件路径和 extension 是否一致。
+
 [![skills.sh](https://skills.sh/b/vinvcn/mattpocock-skills-zh-CN)](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)
 
 <p>
