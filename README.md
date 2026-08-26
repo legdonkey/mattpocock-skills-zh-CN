@@ -33,19 +33,28 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 
 ### 作为 Pi Package 安装
 
-这个 fork 可以作为一个受管理的 [Pi Package](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/packages.md) 集中安装。仓库只克隆一份，内部 skills 仍按需加载：
+这个 fork 可以作为一个受管理的 [Pi Package](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/packages.md) 集中安装。仓库只克隆一份，提供 **Engineering 18 个 + Productivity 7 个，共 25 个 skills**：
 
 ```bash
 pi install git:github.com/legdonkey/mattpocock-skills-zh-CN
 ```
 
-重新启动 Pi；如果 Pi 已经在运行，则执行 `/reload`。首次在项目中使用时运行：
+首次启动交互式 Pi（已经在运行则执行 `/reload`）时会选择加载范围：
+
+```text
+A. 精选（13 个，包含 setup-matt-pocock-skills）
+B. 全部（25 个）
+```
+
+选择保存在 `~/.pi/agent/mattpocock-skills.json`，以后不再重复询问。可随时运行 `/mattpocock-profile` 重新选择，或直接运行 `/mattpocock-profile curated`、`/mattpocock-profile all`。非交互模式在尚未配置时默认使用精选配置。
+
+首次在项目中使用 Engineering 流程时运行：
 
 ```text
 /setup-matt-pocock-skills
 ```
 
-本包提供 Claude 风格的短命令别名，例如 `/tdd`、`/ask-matt` 和 `/code-review`；Pi 原生命令 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review` 同样可用。如果短命令与其他 extension 冲突，请使用 `/skill:<name>`。技能文档里的 Claude Code `/clear` 也已兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
+本包只为当前配置中的 skills 提供 Claude 风格短命令别名，例如 `/tdd`、`/ask-matt` 和 `/code-review`；Pi 原生命令 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review` 同样可用。如果短命令与其他 extension 冲突，请使用 `/skill:<name>`。技能文档里的 Claude Code `/clear` 也已兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
 
 统一管理：
 
@@ -55,7 +64,7 @@ pi update --extensions
 pi remove git:github.com/legdonkey/mattpocock-skills-zh-CN
 ```
 
-Pi 清单只加载稳定技能：排除 `skills/in-progress/`，同时排除只用于 Claude Code hooks 的 `git-guardrails-claude-code`。同步上游清单后可运行 `npm run check:pi` 检查 Pi 清单、文件路径和 extension 是否一致。
+全部配置只包含 `skills/engineering/` 和 `skills/productivity/` 中的 25 个稳定技能，不包含 `skills/misc/`、`skills/in-progress/` 或 `skills/deprecated/`。同步上游清单后可运行 `npm run check:pi` 检查两个配置、文件路径和 extension 是否一致。
 
 [![skills.sh](https://skills.sh/b/vinvcn/mattpocock-skills-zh-CN)](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)
 

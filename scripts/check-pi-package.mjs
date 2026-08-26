@@ -8,30 +8,50 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
 const packageManifest = readJson("package.json");
 const claudePlugin = readJson(".claude-plugin/plugin.json");
-
-const excludedForPi = new Set([
-  "./skills/misc/git-guardrails-claude-code",
-]);
-const expectedSkills = claudePlugin.skills.filter(
-  (skillPath) => !excludedForPi.has(skillPath),
-);
-const actualSkills = packageManifest.pi?.skills ?? [];
+const profiles = readJson("pi-profiles.json");
 const errors = [];
 
-if (new Set(actualSkills).size !== actualSkills.length) {
-  errors.push("package.json 的 pi.skills 存在重复项");
+const includedCategories = [
+  "./skills/engineering/",
+  "./skills/productivity/",
+];
+const expectedAll = claudePlugin.skills.filter((skillPath) =>
+  includedCategories.some((category) => skillPath.startsWith(category)),
+);
+const curated = profiles.curated ?? [];
+const all = profiles.all ?? [];
+
+if ((packageManifest.pi?.skills ?? []).length !== 0) {
+  errors.push("package.json 的 pi.skills 必须为空，skills 应由配置 extension 动态加载");
 }
 
-if (JSON.stringify(actualSkills) !== JSON.stringify(expectedSkills)) {
+if (JSON.stringify(all) !== JSON.stringify(expectedAll)) {
   errors.push(
-    "package.json 的 pi.skills 未与 Claude 稳定清单同步（扣除 Pi 排除项后）",
+    "pi-profiles.json 的 all 未与 Claude 稳定清单中的 Engineering、Productivity 分类同步",
   );
 }
 
-for (const skillPath of actualSkills) {
-  if (!existsSync(resolve(root, skillPath, "SKILL.md"))) {
-    errors.push(`缺少 skill 文件：${skillPath}/SKILL.md`);
+if (curated.length !== 13) {
+  errors.push(`精选配置应为 13 个 skills，当前为 ${curated.length} 个`);
+}
+
+for (const [profileName, skillPaths] of Object.entries({ curated, all })) {
+  if (new Set(skillPaths).size !== skillPaths.length) {
+    errors.push(`${profileName} 配置存在重复项`);
   }
+
+  for (const skillPath of skillPaths) {
+    if (!all.includes(skillPath)) {
+      errors.push(`${profileName} 包含不在 all 配置中的 skill：${skillPath}`);
+    }
+    if (!existsSync(resolve(root, skillPath, "SKILL.md"))) {
+      errors.push(`缺少 skill 文件：${skillPath}/SKILL.md`);
+    }
+  }
+}
+
+if (!curated.includes("./skills/engineering/setup-matt-pocock-skills")) {
+  errors.push("精选配置必须包含 setup-matt-pocock-skills");
 }
 
 for (const extensionPath of packageManifest.pi?.extensions ?? []) {
@@ -46,5 +66,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Pi Package 校验通过：${actualSkills.length} 个 skills，${packageManifest.pi.extensions.length} 个 extension。`,
+  `Pi Package 校验通过：精选 ${curated.length} 个，全部 ${all.length} 个，${packageManifest.pi.extensions.length} 个 extension。`,
 );
