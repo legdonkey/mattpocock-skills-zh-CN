@@ -6,7 +6,7 @@ Skills 按 bucket folder 组织在 `skills/` 下：
 - `in-progress/` - beta：有意公开、欢迎反馈，但不随 plugin 发布
 - `deprecated/` - 不再使用
 
-`engineering/`、`productivity/` 或 `misc/` 中的每个 skill，都必须在顶层 `README.md` 中有引用，并在 `.claude-plugin/plugin.json` 中有条目。`in-progress/` 和 `deprecated/` 中的 skills 不得出现在这两个位置。
+`engineering/`、`productivity/` 或 `misc/` 中的每个 skill，都必须在顶层 `README.md` 中有引用。`.claude-plugin/plugin.json` 只发布 `pi-profiles.json` 中 `curated` 配置列出的 13 个精选 skills，并且两份清单必须完全一致。`in-progress/` 和 `deprecated/` 中的 skills 不得出现在 plugin 或顶层公开索引中。
 
 顶层 `README.md` 中的每个 skill 条目都必须把 skill 名称链接到对应的 `SKILL.md`。
 
@@ -14,4 +14,4 @@ Skills 按 bucket folder 组织在 `skills/` 下：
 
 每个 `SKILL.md` 要么是 user-invoked（frontmatter 中设置 `disable-model-invocation: true`，并在 `agents/openai.yaml` 中设置 `policy.allow_implicit_invocation: false`，只能由人类显式调用），要么是 model-invoked（模型和用户都可以调用）。完整定义、description 约定，以及为什么 user-invoked skill 可以调用 model-invoked skills 但不能调用另一个 user-invoked skill，见 [docs/invocation.md](./docs/invocation.md)。
 
-本仓库也是一个单 plugin 的 Claude Code marketplace：`.claude-plugin/marketplace.json` 列出唯一的 `mattpocock-skills` plugin。修改 `.claude-plugin/plugin.json` 或 marketplace manifest 后，运行 `claude plugin validate . --strict`。Plugin 的公开 skill 集合继续遵循本仓库 bucket 规则。
+本仓库也是一个单 plugin 的 Claude Code marketplace：`.claude-plugin/marketplace.json` 列出唯一的 `mattpocock-skills` plugin，默认只提供 13 个精选 skills，不提供完整配置。修改 `.claude-plugin/plugin.json` 或 marketplace manifest 后，运行 `claude plugin validate . --strict` 和 `npm run check:pi`。Plugin 版本必须与上游保持同步，不因本地打包或清单调整而单独提升。

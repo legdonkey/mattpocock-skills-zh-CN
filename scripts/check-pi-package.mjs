@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,14 +12,23 @@ const profiles = readJson("pi-profiles.json");
 const errors = [];
 
 const includedCategories = [
-  "./skills/engineering/",
-  "./skills/productivity/",
+  "./skills/engineering",
+  "./skills/productivity",
 ];
-const expectedAll = claudePlugin.skills.filter((skillPath) =>
-  includedCategories.some((category) => skillPath.startsWith(category)),
-);
+const expectedAll = includedCategories
+  .flatMap((category) =>
+    readdirSync(resolve(root, category), { withFileTypes: true })
+      .filter(
+        (entry) =>
+          entry.isDirectory() &&
+          existsSync(resolve(root, category, entry.name, "SKILL.md")),
+      )
+      .map((entry) => `${category}/${entry.name}`),
+  )
+  .sort();
 const curated = profiles.curated ?? [];
 const all = profiles.all ?? [];
+const claudeSkills = claudePlugin.skills ?? [];
 
 if ((packageManifest.pi?.skills ?? []).length !== 0) {
   errors.push("package.json 的 pi.skills 必须为空，skills 应由配置 extension 动态加载");
@@ -27,7 +36,13 @@ if ((packageManifest.pi?.skills ?? []).length !== 0) {
 
 if (JSON.stringify(all) !== JSON.stringify(expectedAll)) {
   errors.push(
-    "pi-profiles.json 的 all 未与 Claude 稳定清单中的 Engineering、Productivity 分类同步",
+    "pi-profiles.json 的 all 未与 Engineering、Productivity 目录中的稳定 skills 同步",
+  );
+}
+
+if (JSON.stringify(claudeSkills) !== JSON.stringify(curated)) {
+  errors.push(
+    ".claude-plugin/plugin.json 的 skills 必须与 pi-profiles.json 的 curated 配置一致",
   );
 }
 

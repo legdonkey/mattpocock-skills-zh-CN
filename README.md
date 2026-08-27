@@ -31,6 +31,8 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 /plugin install mattpocock-skills@mattpocock
 ```
 
+Claude Code plugin 默认只提供与 Pi 精选配置相同的 **13 个 skills**，不安装完整配置。
+
 ### 作为 Pi Package 安装
 
 这个 fork 可以作为一个受管理的 [Pi Package](https://github.com/earendil-works/pi-mono/blob/main/packages/coding-agent/docs/packages.md) 集中安装。仓库只克隆一份，提供 **Engineering 18 个 + Productivity 7 个，共 25 个 skills**：
@@ -109,7 +111,7 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 
 ### 作为 Claude Code plugin 安装
 
-如果你更喜欢无需手动维护的即装即用方式，这些 skills 也以原生 [Claude Code plugin](https://code.claude.com/docs/en/plugins) 发布。与把可编辑文件复制进 repo 不同，plugin 会把整套 skills 安装为受管理的 bundle；新版本发布后可以统一更新。
+如果你更喜欢无需手动维护的即装即用方式，这些 skills 也以原生 [Claude Code plugin](https://code.claude.com/docs/en/plugins) 发布。与把可编辑文件复制进 repo 不同，plugin 会把精选的 13 个 skills 安装为受管理的 bundle；新版本发布后可以统一更新。
 
 在 Claude Code 中运行：
 
@@ -130,7 +132,7 @@ claude plugin install mattpocock-skills@mattpocock
 两种安装方式代表两种使用取向，只选其一——两个都装会让每个 skill 被安装两次：
 
 - **[skills.sh](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)** 会把 skills 复制进项目，方便你修改、定制，把它们变成自己的东西。
-- **Plugin** 把它们作为受管理的只读 bundle 安装，随新版本发布统一更新——是订阅而不是 fork，适合只想直接使用并持续跟进更新的用户。
+- **Plugin** 把精选的 13 个 skills 作为受管理的只读 bundle 安装，随上游版本发布统一更新——是订阅而不是 fork，适合只想直接使用核心流程并持续跟进更新的用户。
 
 > 使用 Codex 或其他 agent？[skills.sh installer](https://skills.sh/vinvcn/mattpocock-skills-zh-CN) 已经可以把这些 skills 安装到 Codex 和其他兼容 Agent Skills 的 harnesses；目前尚未提供原生 Codex plugin。
 
