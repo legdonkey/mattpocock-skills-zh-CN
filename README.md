@@ -14,12 +14,12 @@
 
 本仓库按内容刷新方式同步上游，不同步上游 Git 历史或仓库管理状态。维护规则见 [`.skills/translate-skill/SKILL.md`](./.skills/translate-skill/SKILL.md)。
 
-本仓库的最近一次同步翻译由 Claude（Anthropic）执行，并由仓库维护者通过 PR 纳入 `main`。翻译策略是 **skill-guided content localization**：把上游 `mattpocock/skills` 当作英文内容来源，只翻译自然语言说明，保留目录名、skill name、frontmatter key、命令、代码块、路径、URL、package/tool/API identifiers 和行为关键 labels。用户可见的安装路径统一保持为 `vinvcn/mattpocock-skills-zh-CN`。
+本仓库的最近一次同步翻译由 Claude（Anthropic）执行，并由仓库维护者通过 PR 纳入 `main`。翻译策略是 **skill-guided content localization**：把上游 `mattpocock/skills` 当作英文内容来源，只翻译自然语言说明，保留目录名、skill name、frontmatter key、命令、代码块、路径、URL、package/tool/API identifiers 和行为关键 labels。用户可见的安装路径统一保持为 `legdonkey/mattpocock-skills-zh-CN`。
 
 ## 30 秒安装
 
 ```bash
-npx skills@latest add vinvcn/mattpocock-skills-zh-CN
+npx skills@latest add legdonkey/mattpocock-skills-zh-CN
 ```
 
 选择你想安装的 skills，以及要安装到哪些 coding agents。首次安装时请确保选择 [`/setup-matt-pocock-skills`](./skills/engineering/setup-matt-pocock-skills/SKILL.md)，然后在 agent 中运行它来完成 issue tracker、labels 和 docs 目录配置。
@@ -27,7 +27,7 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 或者在 Claude Code 中运行：
 
 ```
-/plugin marketplace add vinvcn/mattpocock-skills-zh-CN
+/plugin marketplace add legdonkey/mattpocock-skills-zh-CN
 /plugin install mattpocock-skills@mattpocock
 ```
 
@@ -68,7 +68,7 @@ pi remove git:github.com/legdonkey/mattpocock-skills-zh-CN
 
 全部配置只包含 `skills/engineering/` 和 `skills/productivity/` 中的 25 个稳定技能，不包含 `skills/misc/`、`skills/in-progress/` 或 `skills/deprecated/`。同步上游清单后可运行 `npm run check:pi` 检查两个配置、文件路径和 extension 是否一致。
 
-[![skills.sh](https://skills.sh/b/vinvcn/mattpocock-skills-zh-CN)](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)
+[![skills.sh](https://skills.sh/b/legdonkey/mattpocock-skills-zh-CN)](https://skills.sh/legdonkey/mattpocock-skills-zh-CN)
 
 <p>
   <a href="https://www.aihero.dev/s/skills-newsletter">
@@ -97,7 +97,7 @@ pi remove git:github.com/legdonkey/mattpocock-skills-zh-CN
 1. 运行 skills.sh installer：
 
 ```bash
-npx skills@latest add vinvcn/mattpocock-skills-zh-CN
+npx skills@latest add legdonkey/mattpocock-skills-zh-CN
 ```
 
 2. 选择你想安装的 skills，以及要安装到哪些 coding agents。**确保选择 `/setup-matt-pocock-skills`**。
@@ -116,14 +116,14 @@ npx skills@latest add vinvcn/mattpocock-skills-zh-CN
 在 Claude Code 中运行：
 
 ```
-/plugin marketplace add vinvcn/mattpocock-skills-zh-CN
+/plugin marketplace add legdonkey/mattpocock-skills-zh-CN
 /plugin install mattpocock-skills@mattpocock
 ```
 
 或在 shell 中运行：
 
 ```bash
-claude plugin marketplace add vinvcn/mattpocock-skills-zh-CN
+claude plugin marketplace add legdonkey/mattpocock-skills-zh-CN
 claude plugin install mattpocock-skills@mattpocock
 ```
 
@@ -131,10 +131,10 @@ claude plugin install mattpocock-skills@mattpocock
 
 两种安装方式代表两种使用取向，只选其一——两个都装会让每个 skill 被安装两次：
 
-- **[skills.sh](https://skills.sh/vinvcn/mattpocock-skills-zh-CN)** 会把 skills 复制进项目，方便你修改、定制，把它们变成自己的东西。
+- **[skills.sh](https://skills.sh/legdonkey/mattpocock-skills-zh-CN)** 会把 skills 复制进项目，方便你修改、定制，把它们变成自己的东西。
 - **Plugin** 把精选的 13 个 skills 作为受管理的只读 bundle 安装，随上游版本发布统一更新——是订阅而不是 fork，适合只想直接使用核心流程并持续跟进更新的用户。
 
-> 使用 Codex 或其他 agent？[skills.sh installer](https://skills.sh/vinvcn/mattpocock-skills-zh-CN) 已经可以把这些 skills 安装到 Codex 和其他兼容 Agent Skills 的 harnesses；目前尚未提供原生 Codex plugin。
+> 使用 Codex 或其他 agent？[skills.sh installer](https://skills.sh/legdonkey/mattpocock-skills-zh-CN) 已经可以把这些 skills 安装到 Codex 和其他兼容 Agent Skills 的 harnesses；目前尚未提供原生 Codex plugin。
 
 ### 为什么这些 Skills 存在
 

@@ -51,13 +51,16 @@ if (files.includes("README.md")) {
   if (/npx skills@latest add mattpocock\/skills\//.test(readme)) {
     fail("README.md", "install commands still point at mattpocock/skills");
   }
-  if (/vinvcn\/skills-zh-CN/.test(readme)) {
-    fail("README.md", "README still points at vinvcn/skills-zh-CN");
+  if (/vinvcn\/mattpocock-skills-zh-CN/.test(readme)) {
+    fail("README.md", "README still points at the previous vinvcn repository");
   }
-  if (!/vinvcn\/mattpocock-skills-zh-CN/.test(readme)) {
+  if (/legdonkey\/skills-zh-CN/.test(readme)) {
+    fail("README.md", "README still points at legdonkey/skills-zh-CN");
+  }
+  if (!/legdonkey\/mattpocock-skills-zh-CN/.test(readme)) {
     fail(
       "README.md",
-      "README does not reference vinvcn/mattpocock-skills-zh-CN",
+      "README does not reference legdonkey/mattpocock-skills-zh-CN",
     );
   }
 }
