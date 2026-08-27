@@ -51,10 +51,10 @@ B. 全部（25 个）
 首次在项目中使用 Engineering 流程时运行：
 
 ```text
-/setup-matt-pocock-skills
+/skill:setup-matt-pocock-skills
 ```
 
-本包只为当前配置中的 skills 提供 Claude 风格短命令别名，例如 `/tdd`、`/ask-matt` 和 `/code-review`；Pi 原生命令 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review` 同样可用。如果短命令与其他 extension 冲突，请使用 `/skill:<name>`。技能文档里的 Claude Code `/clear` 也已兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
+Pi 中统一使用原生的 `/skill:<name>` 命令调用技能，例如 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review`。技能文档里的 Claude Code `/clear` 已做兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
 
 统一管理：
 

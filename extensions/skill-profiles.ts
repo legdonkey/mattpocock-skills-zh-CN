@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { basename, dirname, join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
@@ -57,36 +57,6 @@ const profileLabels: Record<ProfileName, string> = {
 
 export default function (pi: ExtensionAPI) {
   let selectedProfile = readSavedProfile();
-  let aliasesRegistered = false;
-
-  const registerSkillAliases = () => {
-    if (aliasesRegistered || !selectedProfile) return;
-    aliasesRegistered = true;
-
-    for (const skillPath of profiles[selectedProfile]) {
-      const name = basename(skillPath);
-      pi.registerCommand(name, {
-        description: `加载 ${name} skill（等同于 /skill:${name}）`,
-        handler: async (args, ctx) => {
-          const suffix = args.trim();
-          const command = `/skill:${name}${suffix ? ` ${suffix}` : ""}`;
-
-          if (ctx.isIdle()) {
-            pi.sendUserMessage(command, { expandPromptTemplates: true });
-            return;
-          }
-
-          pi.sendUserMessage(command, {
-            deliverAs: "followUp",
-            expandPromptTemplates: true,
-          });
-          ctx.ui.notify(`已排队：/${name}`, "info");
-        },
-      });
-    }
-  };
-
-  if (selectedProfile) registerSkillAliases();
 
   pi.on("session_start", async (_event, ctx) => {
     if (!selectedProfile) {
@@ -109,8 +79,6 @@ export default function (pi: ExtensionAPI) {
 
       selectedProfile ??= "curated";
     }
-
-    registerSkillAliases();
   });
 
   pi.on("resources_discover", () => ({
@@ -155,17 +123,6 @@ export default function (pi: ExtensionAPI) {
 
       await ctx.reload();
       return;
-    },
-  });
-
-  pi.registerCommand("clear", {
-    description: "开始新会话（兼容 Claude Code 的 /clear）",
-    handler: async (_args, ctx) => {
-      await ctx.waitForIdle();
-      const result = await ctx.newSession();
-      if (result.cancelled) {
-        ctx.ui.notify("新会话已取消", "warning");
-      }
     },
   });
 }

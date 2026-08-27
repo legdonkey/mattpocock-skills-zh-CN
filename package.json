@@ -23,7 +23,8 @@
   },
   "pi": {
     "extensions": [
-      "./extensions/skill-aliases.ts"
+      "./extensions/skill-profiles.ts",
+      "./extensions/claude-compat.ts"
     ],
     "skills": []
   }
