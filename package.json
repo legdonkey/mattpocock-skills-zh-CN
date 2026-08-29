@@ -9,7 +9,13 @@
     "url": "https://github.com/legdonkey/mattpocock-skills-zh-CN.git"
   },
   "scripts": {
-    "check:pi": "node ./scripts/check-pi-package.mjs"
+    "check": "npm run check:translation && npm run check:pi && npm run check:fork && git diff --check && git diff --cached --check",
+    "check:translation": "node ./scripts/check-translation.mjs",
+    "check:pi": "node ./scripts/check-pi-package.mjs",
+    "check:fork": "node ./scripts/check-fork.mjs",
+    "check:claude": "claude plugin validate . --strict",
+    "upstream:check": "node ./scripts/upstream-check.mjs",
+    "upstream:sync": "node ./scripts/upstream-sync.mjs"
   },
   "keywords": [
     "pi-package",

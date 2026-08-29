@@ -51,8 +51,19 @@ if (files.includes("README.md")) {
   if (/npx skills@latest add mattpocock\/skills\//.test(readme)) {
     fail("README.md", "install commands still point at mattpocock/skills");
   }
-  if (/vinvcn\/mattpocock-skills-zh-CN/.test(readme)) {
-    fail("README.md", "README still points at the previous vinvcn repository");
+  const installLines = readme
+    .split("\n")
+    .filter((line) =>
+      /npx skills@latest add|plugin marketplace add|pi install git:github\.com|skills\.sh\//.test(
+        line,
+      ),
+    );
+  if (
+    installLines.some((line) =>
+      line.includes("vinvcn/mattpocock-skills-zh-CN"),
+    )
+  ) {
+    fail("README.md", "install entry still points at the vinvcn upstream");
   }
   if (/legdonkey\/skills-zh-CN/.test(readme)) {
     fail("README.md", "README still points at legdonkey/skills-zh-CN");
@@ -72,7 +83,10 @@ if (!fs.existsSync("LICENSE.zh-CN.md")) {
   fail("LICENSE.zh-CN.md", "missing unofficial Chinese license translation");
 }
 const licenseDiff = execSync("git diff -- LICENSE", { encoding: "utf8" });
-if (licenseDiff.trim()) {
+const stagedLicenseDiff = execSync("git diff --cached -- LICENSE", {
+  encoding: "utf8",
+});
+if (licenseDiff.trim() || stagedLicenseDiff.trim()) {
   fail("LICENSE", "original LICENSE file was modified");
 }
 

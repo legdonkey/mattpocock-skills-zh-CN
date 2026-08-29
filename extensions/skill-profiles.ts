@@ -51,8 +51,8 @@ function parseProfileArgument(args: string): ProfileName | undefined {
 }
 
 const profileLabels: Record<ProfileName, string> = {
-  curated: "A. 精选（13 个）",
-  all: "B. 全部（25 个）",
+  curated: `A. 精选（${profiles.curated.length} 个）`,
+  all: `B. 全部（${profiles.all.length} 个）`,
 };
 
 export default function (pi: ExtensionAPI) {

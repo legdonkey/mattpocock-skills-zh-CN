@@ -14,4 +14,10 @@ Skills 按 bucket folder 组织在 `skills/` 下：
 
 每个 `SKILL.md` 要么是 user-invoked（frontmatter 中设置 `disable-model-invocation: true`，并在 `agents/openai.yaml` 中设置 `policy.allow_implicit_invocation: false`，只能由人类显式调用），要么是 model-invoked（模型和用户都可以调用）。完整定义、description 约定，以及为什么 user-invoked skill 可以调用 model-invoked skills 但不能调用另一个 user-invoked skill，见 [docs/invocation.md](./docs/invocation.md)。
 
-本仓库也是一个单 plugin 的 Claude Code marketplace：`.claude-plugin/marketplace.json` 列出唯一的 `mattpocock-skills` plugin，默认只提供 13 个精选 skills，不提供完整配置。修改 `.claude-plugin/plugin.json` 或 marketplace manifest 后，运行 `claude plugin validate . --strict` 和 `npm run check:pi`。Plugin 版本必须与上游保持同步，不因本地打包或清单调整而单独提升。
+本仓库也是一个单 plugin 的 Claude Code marketplace：`.claude-plugin/marketplace.json` 列出唯一的 `mattpocock-skills` plugin，默认只提供 13 个精选 skills，不提供完整配置。修改 `.claude-plugin/plugin.json` 或 marketplace manifest 后，运行 `npm run check` 和 `npm run check:claude`。Plugin 版本必须与直接上游保持同步，不因本地打包或清单调整而单独提升。
+
+## 上游同步
+
+本仓库的直接上游是 `vinvcn/mattpocock-skills-zh-CN`，英文源上游是 `mattpocock/skills`。开始任何上游同步前必须完整阅读 [`FORK.md`](./FORK.md)，使用 `npm run upstream:check` 检查，使用 `npm run upstream:sync` 创建同步分支并准备合并。同步时必须保留 Pi Package、精选/全量配置、Claude Code 精选 13 个、`legdonkey` 安装身份和版本跟随策略。
+
+普通同步只合并直接上游，不重新翻译已经本地化的内容。只有明确决定直接从 `mattpocock/skills` 补充英文源内容时，才先使用 `.skills/translate-skill/SKILL.md`，并把它作为独立的翻译刷新处理。

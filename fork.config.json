@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "directUpstream": {
+    "remote": "upstream",
+    "repository": "vinvcn/mattpocock-skills-zh-CN",
+    "url": "https://github.com/vinvcn/mattpocock-skills-zh-CN.git",
+    "branch": "main"
+  },
+  "sourceUpstream": {
+    "remote": "source",
+    "repository": "mattpocock/skills",
+    "url": "https://github.com/mattpocock/skills.git",
+    "branch": "main"
+  },
+  "integrationBranch": "main",
+  "installRepository": "legdonkey/mattpocock-skills-zh-CN",
+  "versionPolicy": "follow-direct-upstream",
+  "curatedSkillCount": 13,
+  "piExtensions": [
+    "./extensions/skill-profiles.ts",
+    "./extensions/claude-compat.ts"
+  ],
+  "requiredLocalPaths": [
+    "FORK.md",
+    "fork.config.json",
+    "package.json",
+    "pi-profiles.json",
+    "extensions/skill-profiles.ts",
+    "extensions/claude-compat.ts",
+    "scripts/check-fork.mjs",
+    "scripts/check-pi-package.mjs",
+    "scripts/fork-utils.mjs",
+    "scripts/upstream-check.mjs",
+    "scripts/upstream-sync.mjs"
+  ],
+  "reviewPaths": [
+    ".claude-plugin/",
+    ".skills/translate-skill/",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "README.md",
+    "package.json",
+    "pi-profiles.json",
+    "extensions/",
+    "scripts/"
+  ]
+}

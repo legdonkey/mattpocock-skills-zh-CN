@@ -8,13 +8,20 @@
 
 ## 关于这个中文版
 
-这是 [`mattpocock/skills`](https://github.com/mattpocock/skills) 的简体中文本地化版本。文档和技能说明已翻译；目录名、技能名、命令、代码块、路径和工具标识保持不变，以免破坏安装和运行行为。
+本仓库基于 [`vinvcn/mattpocock-skills-zh-CN`](https://github.com/vinvcn/mattpocock-skills-zh-CN) 继续开发；该直接上游是 [`mattpocock/skills`](https://github.com/mattpocock/skills) 的简体中文本地化版本。文档和技能说明已翻译；目录名、技能名、命令、代码块、路径和工具标识保持不变，以免破坏安装和运行行为。
 
 中文版本不只是为了阅读方便。对中文母语用户来说，中文说明能减少概念转换成本；对以中文为主要交互语言或中文语料优化的模型来说，中文 prompt 和 skill instructions 也更容易贴合中文上下文，减少中英混杂带来的歧义。
 
-本仓库按内容刷新方式同步上游，不同步上游 Git 历史或仓库管理状态。维护规则见 [`.skills/translate-skill/SKILL.md`](./.skills/translate-skill/SKILL.md)。
+## 本 Fork 的扩展
 
-本仓库的最近一次同步翻译由 Claude（Anthropic）执行，并由仓库维护者通过 PR 纳入 `main`。翻译策略是 **skill-guided content localization**：把上游 `mattpocock/skills` 当作英文内容来源，只翻译自然语言说明，保留目录名、skill name、frontmatter key、命令、代码块、路径、URL、package/tool/API identifiers 和行为关键 labels。用户可见的安装路径统一保持为 `legdonkey/mattpocock-skills-zh-CN`。
+在直接上游的中文内容之上，本仓库增加了：
+
+- 可受管理安装的 Pi Package。
+- Pi 精选 13 个与全量 25 个 skills 配置，可随时切换。
+- Claude Code plugin 默认只安装与 Pi 相同的 13 个精选 skills。
+- Claude Code `/clear` 在 Pi 中的新会话兼容。
+
+普通更新跟踪 `vinvcn/mattpocock-skills-zh-CN` 的 Git 历史；只有直接从英文源仓库补内容时才运行本地翻译流程。完整的本地差异、版本策略和一键同步方法见 [`FORK.md`](./FORK.md)。用户可见的安装路径统一保持为 `legdonkey/mattpocock-skills-zh-CN`。
 
 ## 30 秒安装
 

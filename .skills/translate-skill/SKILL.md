@@ -127,7 +127,9 @@ When translating one file:
 
 ## Workflow for a repo refresh
 
-When refreshing from upstream:
+This workflow is only for a source-level refresh from `mattpocock/skills`. Normal fork maintenance follows [`FORK.md`](../../FORK.md) and merges the already-localized direct upstream `vinvcn/mattpocock-skills-zh-CN`; do not translate that content again.
+
+When refreshing from the source upstream:
 
 1. Treat upstream as a content source, not as Git history.
 2. Identify new, changed, and removed content files.
@@ -146,7 +148,7 @@ When refreshing from upstream:
 
 1. 运行 `node scripts/check-translation.mjs`，确认 Markdown 结构、frontmatter、README install path 和 license invariant 没被破坏。
 2. 检查公开 skill 索引一致性：`engineering/`、`productivity/`、`misc/` 下的 skills 必须出现在顶层 `README.md`；`.claude-plugin/plugin.json` 必须只包含并完整匹配 `pi-profiles.json` 的 `curated` 配置；`personal/`、`in-progress/`、`deprecated/` 不应出现在 plugin 或顶层公开索引中。
-3. 对比 `upstream/main` 的 in-scope 文件清单，确认没有缺失上游文件，也没有保留已经从上游移除且不属于本地策略的 stale files。
+3. 对比 `source/main`（英文源上游）的 in-scope 文件清单，确认没有缺失源文件，也没有保留已经从源上游移除且不属于本地策略的 stale files。
 4. 检查共同 Markdown 文件的行为关键内容：frontmatter keys 和 `name` 值不变，fenced code blocks 平衡，路径、命令、URL、identifier 不被误改。
 5. 运行 `git diff --check` 和 `git diff --cached --check`，确认没有 whitespace 或 patch hygiene 问题。
 6. 检查 README 同步记录指向最新 upstream short SHA，并包含本地同步 commit；不能留下“待定”占位。
