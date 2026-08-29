@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Matt Pocock Skills 中文 Fork 架构",
+    "locale": "zh-CN",
+    "output": "fork-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/legdonkey/mattpocock-skills-zh-CN",
+      "revision": "440871b8ac02e89cb529ab69271d764c334b80fe"
+    },
+    "views": [
+      {
+        "id": "upstream-lineage",
+        "label": "上游同步主路径",
+        "focus": ["englishSource", "cnUpstream", "upstreamTracking", "syncWorkflow", "contentCatalog"],
+        "note": "先检查 upstream/main，再在独立同步分支中合并并校验。"
+      },
+      {
+        "id": "translation-fallback",
+        "label": "英文源翻译兜底",
+        "focus": ["englishSource", "translationWorkflow", "contentCatalog"],
+        "note": "普通同步不重复翻译；只有直接补英文源内容时才运行翻译 skill。"
+      },
+      {
+        "id": "pi-delivery",
+        "label": "Pi 交付",
+        "focus": ["contentCatalog", "profileConfig", "piDelivery"],
+        "note": "Pi 通过 profile 动态选择精选 13 个或全量 25 个 skills。"
+      },
+      {
+        "id": "claude-delivery",
+        "label": "Claude Code 交付",
+        "focus": ["contentCatalog", "profileConfig", "claudeDelivery"],
+        "note": "Claude Code plugin 与 curated 清单同源，只发布精选 13 个。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "englishSource",
+      "type": "external",
+      "label": "mattpocock/skills",
+      "sublabel": "英文源上游",
+      "pos": [40, 280],
+      "size": [150, 72]
+    },
+    {
+      "id": "cnUpstream",
+      "type": "external",
+      "label": "vinvcn 中文仓库",
+      "sublabel": "直接上游 · upstream/main",
+      "pos": [260, 280],
+      "size": [160, 72]
+    },
+    {
+      "id": "upstreamTracking",
+      "type": "backend",
+      "label": "上游差异检查",
+      "sublabel": "npm run upstream:check",
+      "tag": "fetch · merge-base · 版本比较",
+      "sources": [
+        { "path": "scripts/upstream-check.mjs" },
+        { "path": "scripts/fork-utils.mjs" },
+        { "path": "fork.config.json" }
+      ],
+      "pos": [500, 170],
+      "size": [190, 80]
+    },
+    {
+      "id": "syncWorkflow",
+      "type": "backend",
+      "label": "安全同步工作流",
+      "sublabel": "npm run upstream:sync",
+      "tag": "独立分支 · no-commit · 完整校验",
+      "sources": [
+        { "path": "scripts/upstream-sync.mjs" },
+        { "path": "FORK.md" },
+        { "path": "scripts/check-fork.mjs" }
+      ],
+      "pos": [500, 390],
+      "size": [190, 80]
+    },
+    {
+      "id": "translationWorkflow",
+      "type": "backend",
+      "label": "英文源翻译兜底",
+      "sublabel": ".skills/translate-skill",
+      "tag": "仅直接补源内容时启用",
+      "sources": [
+        { "path": ".skills/translate-skill/SKILL.md" },
+        { "path": "scripts/check-translation.mjs" }
+      ],
+      "pos": [740, 70],
+      "size": [190, 80]
+    },
+    {
+      "id": "contentCatalog",
+      "type": "database",
+      "label": "中文 Skill 内容库",
+      "sublabel": "Engineering 18 + Productivity 7",
+      "tag": "稳定内容 25 个",
+      "sources": [
+        { "path": "skills/engineering/README.md" },
+        { "path": "skills/productivity/README.md" },
+        { "path": "README.md" }
+      ],
+      "pos": [745, 280],
+      "size": [180, 78]
+    },
+    {
+      "id": "profileConfig",
+      "type": "backend",
+      "label": "精选 / 全量配置",
+      "sublabel": "pi-profiles.json",
+      "tag": "curated 13 · all 25",
+      "sources": [
+        { "path": "pi-profiles.json" },
+        { "path": "scripts/check-pi-package.mjs" }
+      ],
+      "pos": [1000, 281],
+      "size": [170, 76]
+    },
+    {
+      "id": "piDelivery",
+      "type": "backend",
+      "label": "Pi Package → Pi",
+      "sublabel": "profile 选择 + /clear 兼容",
+      "tag": "精选 13 · 全量 25",
+      "sources": [
+        { "path": "extensions/skill-profiles.ts" },
+        { "path": "extensions/claude-compat.ts" },
+        { "path": "package.json" }
+      ],
+      "pos": [985, 70],
+      "size": [200, 78]
+    },
+    {
+      "id": "claudeDelivery",
+      "type": "backend",
+      "label": "Claude Plugin → Claude Code",
+      "sublabel": "manifest + marketplace",
+      "tag": "只发布精选 13 个",
+      "sources": [
+        { "path": ".claude-plugin/plugin.json" },
+        { "path": ".claude-plugin/marketplace.json" }
+      ],
+      "pos": [985, 490],
+      "size": [200, 78]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "上游内容来源",
+      "wraps": ["englishSource", "cnUpstream"],
+      "pad": 24
+    },
+    {
+      "kind": "region",
+      "label": "legdonkey/mattpocock-skills-zh-CN",
+      "wraps": ["upstreamTracking", "syncWorkflow", "translationWorkflow", "contentCatalog", "profileConfig", "piDelivery", "claudeDelivery"],
+      "pad": 22
+    }
+  ],
+  "connections": [
+    {
+      "id": "sourceLocalization",
+      "from": "englishSource",
+      "to": "cnUpstream",
+      "label": "简体中文本地化",
+      "variant": "dashed",
+      "labelAt": [225, 366]
+    },
+    {
+      "id": "upstreamFetch",
+      "from": "cnUpstream",
+      "to": "upstreamTracking",
+      "label": "fetch + 差异报告",
+      "variant": "emphasis",
+      "labelAt": [460, 264]
+    },
+    {
+      "id": "trackingToSync",
+      "from": "upstreamTracking",
+      "to": "syncWorkflow",
+      "label": "确认待同步提交",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "labelAt": [595, 270],
+      "toSide": "top"
+    },
+    {
+      "id": "controlledMerge",
+      "from": "syncWorkflow",
+      "to": "contentCatalog",
+      "label": "同步分支合并 + npm run check",
+      "variant": "emphasis",
+      "labelAt": [715, 372]
+    },
+    {
+      "id": "sourceTranslation",
+      "from": "englishSource",
+      "to": "translationWorkflow",
+      "label": "仅缺失内容时取英文源",
+      "variant": "dashed"
+    },
+    {
+      "id": "translatedContent",
+      "from": "translationWorkflow",
+      "to": "contentCatalog",
+      "label": "保留标识符并翻译自然语言",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelAt": [835, 164]
+    },
+    {
+      "id": "catalogToProfiles",
+      "from": "contentCatalog",
+      "to": "profileConfig",
+      "label": "生成并校验配置",
+      "fromSide": "right",
+      "toSide": "left",
+      "route": "straight",
+      "labelAt": [950, 372]
+    },
+    {
+      "id": "profilesToPi",
+      "from": "profileConfig",
+      "to": "piDelivery",
+      "label": "动态选择 curated / all",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "route": "straight"
+    },
+    {
+      "id": "profilesToClaude",
+      "from": "profileConfig",
+      "to": "claudeDelivery",
+      "label": "只发布 curated 13",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelAt": [1085, 370]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "上游同步与翻译",
+      "items": [
+        "upstream:check 获取 vinvcn/main，并报告提交、版本和重点文件",
+        "upstream:sync 创建独立分支，以 --no-commit 合并并运行完整校验",
+        "普通同步不重复翻译；直接补英文源时才调用 translate-skill，并保留标识符"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Pi 与 Claude Code 增强",
+      "items": [
+        "Pi Package 支持精选 13 / 全量 25、profile 切换和 /clear 兼容",
+        "Claude Marketplace 只发布一个 plugin，skills 与 curated 完全一致",
+        "安装身份固定为 legdonkey，package 与 plugin 版本只跟随直接上游"
+      ]
+    }
+  ]
+}
