@@ -17,16 +17,16 @@
   "versionPolicy": "follow-direct-upstream",
   "curatedSkillCount": 13,
   "piExtensions": [
-    "./extensions/skill-profiles.ts",
-    "./extensions/claude-compat.ts"
+    "./extensions/pi-skill-profiles.ts",
+    "./extensions/claude-clear.ts"
   ],
   "requiredLocalPaths": [
     "FORK.md",
     "fork.config.json",
     "package.json",
     "pi-profiles.json",
-    "extensions/skill-profiles.ts",
-    "extensions/claude-compat.ts",
+    "extensions/pi-skill-profiles.ts",
+    "extensions/claude-clear.ts",
     "scripts/check-fork.mjs",
     "scripts/check-pi-package.mjs",
     "scripts/fork-utils.mjs",

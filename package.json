@@ -29,8 +29,8 @@
   },
   "pi": {
     "extensions": [
-      "./extensions/skill-profiles.ts",
-      "./extensions/claude-compat.ts"
+      "./extensions/pi-skill-profiles.ts",
+      "./extensions/claude-clear.ts"
     ],
     "skills": []
   }

@@ -129,8 +129,8 @@
       "sublabel": "profile 选择 + /clear 兼容",
       "tag": "精选 13 · 全量 25",
       "sources": [
-        { "path": "extensions/skill-profiles.ts" },
-        { "path": "extensions/claude-compat.ts" },
+        { "path": "extensions/pi-skill-profiles.ts" },
+        { "path": "extensions/claude-clear.ts" },
         { "path": "package.json" }
       ],
       "pos": [985, 70],

@@ -17,8 +17,8 @@
 | 能力 | 关键文件 | 不变量 |
 | --- | --- | --- |
 | Pi Package 支持 | `package.json` | `pi.extensions` 加载两个本地 extension，`pi.skills` 保持为空 |
-| Pi 精选与全量配置 | `pi-profiles.json`、`extensions/skill-profiles.ts` | 默认精选 13 个；全量自动覆盖 Engineering 和 Productivity 的稳定 skills |
-| Claude Code 兼容 | `extensions/claude-compat.ts` | Pi 中的 `/clear` 开始新会话 |
+| Pi 精选与全量配置 | `pi-profiles.json`、`extensions/pi-skill-profiles.ts` | 默认精选 13 个；全量自动覆盖 Engineering 和 Productivity 的稳定 skills |
+| Claude Code 兼容 | `extensions/claude-clear.ts` | Pi 中的 `/clear` 开始新会话 |
 | Claude Code 精选安装 | `.claude-plugin/plugin.json` | `skills` 与 `pi-profiles.json.curated` 完全一致 |
 | Fork 安装身份 | README、plugin manifest、维护规则 | 用户安装地址始终为 `legdonkey/mattpocock-skills-zh-CN` |
 | 版本策略 | `package.json`、`.claude-plugin/plugin.json` | 两者版本一致，并跟随直接上游版本；不为本地打包改动单独升版 |
