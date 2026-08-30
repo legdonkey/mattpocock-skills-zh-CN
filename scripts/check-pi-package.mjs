@@ -24,6 +24,10 @@ const slashCompatibilityExtension = readFileSync(
   resolve(root, "extensions/pi_slash_compatible.ts"),
   "utf8",
 );
+const clearCompatibilityExtension = readFileSync(
+  resolve(root, "extensions/claude-clear.ts"),
+  "utf8",
+);
 const errors = [];
 
 const includedCategories = ["./skills/engineering", "./skills/productivity"];
@@ -51,16 +55,15 @@ if ((packageManifest.pi?.skills ?? []).length !== 0) {
 const expectedPiExtensions = [
   "./extensions/pi-skill-profiles.ts",
   "./extensions/pi_slash_compatible.ts",
+  "./extensions/claude-clear.ts",
 ];
 if (
   JSON.stringify(packageManifest.pi?.extensions ?? []) !==
   JSON.stringify(expectedPiExtensions)
 ) {
-  errors.push("package.json 必须加载 profile 与 Pi 斜杠命令兼容 extension");
-}
-
-if (existsSync(resolve(root, "extensions/claude-clear.ts"))) {
-  errors.push("旧 extension extensions/claude-clear.ts 应已重命名");
+  errors.push(
+    "package.json 必须加载 profile、skill 斜杠与 /clear 兼容 extensions",
+  );
 }
 
 if (
@@ -72,7 +75,6 @@ if (
 }
 
 for (const requiredSource of [
-  'pi.registerCommand("clear"',
   "pi.events.on(ACTIVE_SKILL_PATHS_EVENT",
   "pi.registerCommand(skillName",
   "`/skill:${skillName}",
@@ -80,6 +82,15 @@ for (const requiredSource of [
 ]) {
   if (!slashCompatibilityExtension.includes(requiredSource)) {
     errors.push(`Pi 斜杠命令兼容 extension 缺少实现：${requiredSource}`);
+  }
+}
+
+for (const requiredSource of [
+  'pi.registerCommand("clear"',
+  "ctx.newSession()",
+]) {
+  if (!clearCompatibilityExtension.includes(requiredSource)) {
+    errors.push(`Claude /clear 兼容 extension 缺少实现：${requiredSource}`);
   }
 }
 

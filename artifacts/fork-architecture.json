@@ -126,11 +126,12 @@
       "id": "piDelivery",
       "type": "backend",
       "label": "Pi Package → Pi",
-      "sublabel": "profile 选择 + slash 兼容",
+      "sublabel": "profile + aliases + /clear",
       "tag": "精选 13 · 全量 25",
       "sources": [
         { "path": "extensions/pi-skill-profiles.ts" },
         { "path": "extensions/pi_slash_compatible.ts" },
+        { "path": "extensions/claude-clear.ts" },
         { "path": "package.json" }
       ],
       "pos": [985, 70],

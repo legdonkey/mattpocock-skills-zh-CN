@@ -30,7 +30,8 @@
   "pi": {
     "extensions": [
       "./extensions/pi-skill-profiles.ts",
-      "./extensions/pi_slash_compatible.ts"
+      "./extensions/pi_slash_compatible.ts",
+      "./extensions/claude-clear.ts"
     ],
     "skills": []
   }
