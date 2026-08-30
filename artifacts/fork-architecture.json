@@ -126,11 +126,11 @@
       "id": "piDelivery",
       "type": "backend",
       "label": "Pi Package → Pi",
-      "sublabel": "profile 选择 + /clear 兼容",
+      "sublabel": "profile 选择 + slash 兼容",
       "tag": "精选 13 · 全量 25",
       "sources": [
         { "path": "extensions/pi-skill-profiles.ts" },
-        { "path": "extensions/claude-clear.ts" },
+        { "path": "extensions/pi_slash_compatible.ts" },
         { "path": "package.json" }
       ],
       "pos": [985, 70],
@@ -263,7 +263,7 @@
       "dot": "cyan",
       "title": "Pi 与 Claude Code 增强",
       "items": [
-        "Pi Package 支持精选 13 / 全量 25、profile 切换和 /clear 兼容",
+        "Pi Package 支持精选 13 / 全量 25、profile 切换和 Claude 斜杠命令兼容",
         "Claude Marketplace 只发布一个 plugin，skills 与 curated 完全一致",
         "安装身份固定为 legdonkey，package 与 plugin 版本只跟随直接上游"
       ]

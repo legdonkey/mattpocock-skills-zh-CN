@@ -19,7 +19,7 @@
 - 可受管理安装的 Pi Package。
 - Pi 精选 13 个与全量 25 个 skills 配置，可随时切换。
 - Claude Code plugin 默认只安装与 Pi 相同的 13 个精选 skills。
-- Claude Code `/clear` 在 Pi 中的新会话兼容。
+- Claude Code 斜杠命令兼容：支持 `/clear`，并为当前 profile 中的 skills 提供 `/<skill-name>` 别名。
 
 普通更新跟踪 `vinvcn/mattpocock-skills-zh-CN` 的 Git 历史；只有直接从英文源仓库补内容时才运行本地翻译流程。完整的本地差异、版本策略和一键同步方法见 [`FORK.md`](./FORK.md)。用户可见的安装路径统一保持为 `legdonkey/mattpocock-skills-zh-CN`。
 
@@ -63,7 +63,7 @@ B. 全部（25 个）
 /skill:setup-matt-pocock-skills
 ```
 
-Pi 中统一使用原生的 `/skill:<name>` 命令调用技能，例如 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review`。技能文档里的 Claude Code `/clear` 已做兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
+Pi 原生命令仍是 `/skill:<name>`，例如 `/skill:tdd`、`/skill:ask-matt` 和 `/skill:code-review`。为兼容技能文档中的 Claude Code 写法，当前 profile 内的每个 skill 同时提供 `/<skill-name>` 别名，例如 `/tdd`、`/ask-matt` 和 `/code-review`；别名参数会原样转发。`/clear` 也已兼容，在 Pi 中会开始一个新会话（相当于 `/new`）。
 
 统一管理：
 
@@ -103,9 +103,9 @@ pi remove git:github.com/legdonkey/mattpocock-skills-zh-CN
 
 1. 运行 skills.sh installer：
 
-```bash
-npx skills@latest add legdonkey/mattpocock-skills-zh-CN
-```
+   ```bash
+   npx skills@latest add legdonkey/mattpocock-skills-zh-CN
+   ```
 
 2. 选择你想安装的 skills，以及要安装到哪些 coding agents。**确保选择 `/setup-matt-pocock-skills`**。
 

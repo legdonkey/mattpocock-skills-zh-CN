@@ -1,20 +1,32 @@
 #!/usr/bin/env node
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const readJson = (path) => JSON.parse(readFileSync(resolve(root, path), "utf8"));
+const readJson = (path) => {
+  const absolutePath = resolve(root, path);
+  try {
+    return JSON.parse(readFileSync(absolutePath, "utf8"));
+  } catch (error) {
+    throw new Error(`读取 JSON 失败：${absolutePath}`, { cause: error });
+  }
+};
 const packageManifest = readJson("package.json");
 const claudePlugin = readJson(".claude-plugin/plugin.json");
 const profiles = readJson("pi-profiles.json");
+const profileExtension = readFileSync(
+  resolve(root, "extensions/pi-skill-profiles.ts"),
+  "utf8",
+);
+const slashCompatibilityExtension = readFileSync(
+  resolve(root, "extensions/pi_slash_compatible.ts"),
+  "utf8",
+);
 const errors = [];
 
-const includedCategories = [
-  "./skills/engineering",
-  "./skills/productivity",
-];
+const includedCategories = ["./skills/engineering", "./skills/productivity"];
 const expectedAll = includedCategories
   .flatMap((category) =>
     readdirSync(resolve(root, category), { withFileTypes: true })
@@ -31,7 +43,44 @@ const all = profiles.all ?? [];
 const claudeSkills = claudePlugin.skills ?? [];
 
 if ((packageManifest.pi?.skills ?? []).length !== 0) {
-  errors.push("package.json 的 pi.skills 必须为空，skills 应由配置 extension 动态加载");
+  errors.push(
+    "package.json 的 pi.skills 必须为空，skills 应由配置 extension 动态加载",
+  );
+}
+
+const expectedPiExtensions = [
+  "./extensions/pi-skill-profiles.ts",
+  "./extensions/pi_slash_compatible.ts",
+];
+if (
+  JSON.stringify(packageManifest.pi?.extensions ?? []) !==
+  JSON.stringify(expectedPiExtensions)
+) {
+  errors.push("package.json 必须加载 profile 与 Pi 斜杠命令兼容 extension");
+}
+
+if (existsSync(resolve(root, "extensions/claude-clear.ts"))) {
+  errors.push("旧 extension extensions/claude-clear.ts 应已重命名");
+}
+
+if (
+  !profileExtension.includes(
+    "pi.events.emit(ACTIVE_SKILL_PATHS_EVENT, { skillPaths })",
+  )
+) {
+  errors.push("skill 斜杠兼容命令必须直接使用当前 profile 返回的 skillPaths");
+}
+
+for (const requiredSource of [
+  'pi.registerCommand("clear"',
+  "pi.events.on(ACTIVE_SKILL_PATHS_EVENT",
+  "pi.registerCommand(skillName",
+  "`/skill:${skillName}",
+  "expandPromptTemplates: true",
+]) {
+  if (!slashCompatibilityExtension.includes(requiredSource)) {
+    errors.push(`Pi 斜杠命令兼容 extension 缺少实现：${requiredSource}`);
+  }
 }
 
 if (JSON.stringify(all) !== JSON.stringify(expectedAll)) {
@@ -59,8 +108,20 @@ for (const [profileName, skillPaths] of Object.entries({ curated, all })) {
     if (!all.includes(skillPath)) {
       errors.push(`${profileName} 包含不在 all 配置中的 skill：${skillPath}`);
     }
-    if (!existsSync(resolve(root, skillPath, "SKILL.md"))) {
+    const skillFile = resolve(root, skillPath, "SKILL.md");
+    if (!existsSync(skillFile)) {
       errors.push(`缺少 skill 文件：${skillPath}/SKILL.md`);
+      continue;
+    }
+
+    const frontmatterName = readFileSync(skillFile, "utf8").match(
+      /^name:\s*([^\s"']+)\s*$/m,
+    )?.[1];
+    const directoryName = basename(skillPath);
+    if (frontmatterName !== directoryName) {
+      errors.push(
+        `skill 目录名必须与 frontmatter name 一致，以生成斜杠别名：${skillPath}`,
+      );
     }
   }
 }
@@ -76,10 +137,10 @@ for (const extensionPath of packageManifest.pi?.extensions ?? []) {
 }
 
 if (errors.length > 0) {
-  console.error(errors.map((error) => `- ${error}`).join("\n"));
+  process.stderr.write(`${errors.map((error) => `- ${error}`).join("\n")}\n`);
   process.exit(1);
 }
 
-console.log(
-  `Pi Package 校验通过：精选 ${curated.length} 个，全部 ${all.length} 个，${packageManifest.pi.extensions.length} 个 extension。`,
+process.stdout.write(
+  `Pi Package 校验通过：精选 ${curated.length} 个，全部 ${all.length} 个，${packageManifest.pi.extensions.length} 个 extension。\n`,
 );

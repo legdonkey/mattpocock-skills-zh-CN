@@ -18,7 +18,7 @@
   "curatedSkillCount": 13,
   "piExtensions": [
     "./extensions/pi-skill-profiles.ts",
-    "./extensions/claude-clear.ts"
+    "./extensions/pi_slash_compatible.ts"
   ],
   "requiredLocalPaths": [
     "FORK.md",
@@ -26,7 +26,7 @@
     "package.json",
     "pi-profiles.json",
     "extensions/pi-skill-profiles.ts",
-    "extensions/claude-clear.ts",
+    "extensions/pi_slash_compatible.ts",
     "scripts/check-fork.mjs",
     "scripts/check-pi-package.mjs",
     "scripts/fork-utils.mjs",

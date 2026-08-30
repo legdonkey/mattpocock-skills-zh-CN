@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { ACTIVE_SKILL_PATHS_EVENT } from "./pi_slash_compatible.ts";
 
 type ProfileName = "curated" | "all";
 
@@ -11,28 +12,32 @@ interface Profiles {
   all: string[];
 }
 
-interface SavedConfig {
-  profile?: ProfileName;
-}
-
 const packageRoot = resolve(
   dirname(fileURLToPath(new URL("../package.json", import.meta.url))),
 );
-const profiles = JSON.parse(
-  readFileSync(join(packageRoot, "pi-profiles.json"), "utf8"),
-) as Profiles;
+const profilesPath = join(packageRoot, "pi-profiles.json");
+
+function readProfiles(): Profiles {
+  try {
+    return JSON.parse(readFileSync(profilesPath, "utf8")) as Profiles;
+  } catch (error) {
+    throw new Error(`读取 Pi skill profiles 失败：${profilesPath}`, {
+      cause: error,
+    });
+  }
+}
+
+const profiles = readProfiles();
 const configDir =
   process.env.PI_CODING_AGENT_DIR ?? join(homedir(), ".pi", "agent");
 const configPath = join(configDir, "mattpocock-skills.json");
 
-function isProfileName(value: unknown): value is ProfileName {
-  return value === "curated" || value === "all";
-}
-
 function readSavedProfile(): ProfileName | undefined {
   try {
-    const config = JSON.parse(readFileSync(configPath, "utf8")) as SavedConfig;
-    return isProfileName(config.profile) ? config.profile : undefined;
+    const profile = (
+      JSON.parse(readFileSync(configPath, "utf8")) as { profile?: unknown }
+    ).profile;
+    return profile === "curated" || profile === "all" ? profile : undefined;
   } catch {
     return undefined;
   }
@@ -40,7 +45,11 @@ function readSavedProfile(): ProfileName | undefined {
 
 function saveProfile(profile: ProfileName): void {
   mkdirSync(configDir, { recursive: true });
-  writeFileSync(configPath, `${JSON.stringify({ profile }, null, 2)}\n`, "utf8");
+  writeFileSync(
+    configPath,
+    `${JSON.stringify({ profile }, null, 2)}\n`,
+    "utf8",
+  );
 }
 
 function parseProfileArgument(args: string): ProfileName | undefined {
@@ -50,10 +59,10 @@ function parseProfileArgument(args: string): ProfileName | undefined {
   return undefined;
 }
 
-const profileLabels: Record<ProfileName, string> = {
+const profileLabels = {
   curated: `A. 精选（${profiles.curated.length} 个）`,
   all: `B. 全部（${profiles.all.length} 个）`,
-};
+} satisfies Record<ProfileName, string>;
 
 export default function (pi: ExtensionAPI) {
   let selectedProfile = readSavedProfile();
@@ -67,8 +76,7 @@ export default function (pi: ExtensionAPI) {
         ]);
 
         if (choice) {
-          selectedProfile =
-            choice === profileLabels.all ? "all" : "curated";
+          selectedProfile = choice === profileLabels.all ? "all" : "curated";
           try {
             saveProfile(selectedProfile);
           } catch (error) {
@@ -81,11 +89,13 @@ export default function (pi: ExtensionAPI) {
     }
   });
 
-  pi.on("resources_discover", () => ({
-    skillPaths: profiles[selectedProfile ?? "curated"].map((skillPath) =>
+  pi.on("resources_discover", () => {
+    const skillPaths = profiles[selectedProfile ?? "curated"].map((skillPath) =>
       resolve(packageRoot, skillPath),
-    ),
-  }));
+    );
+    pi.events.emit(ACTIVE_SKILL_PATHS_EVENT, { skillPaths });
+    return { skillPaths };
+  });
 
   pi.registerCommand("mattpocock-profile", {
     description: "切换 Matt Pocock Skills 配置：curated 或 all",
@@ -102,10 +112,7 @@ export default function (pi: ExtensionAPI) {
       }
 
       if (!profile) {
-        ctx.ui.notify(
-          "用法：/mattpocock-profile curated|all",
-          "warning",
-        );
+        ctx.ui.notify("用法：/mattpocock-profile curated|all", "warning");
         return;
       }
 
